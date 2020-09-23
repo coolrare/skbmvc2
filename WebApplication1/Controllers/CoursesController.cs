@@ -48,10 +48,12 @@ namespace WebApplication1.Controllers
         // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseID,Title,Credits,DepartmentID")] Course course)
+        public ActionResult Create([Bind(Include = "CourseID,Title,Credits,CreatedOn,DepartmentID")] Course course)
         {
             if (ModelState.IsValid)
             {
+                course.CreatedOn = DateTime.Now;
+
                 db.Course.Add(course);
                 db.SaveChanges();
                 return RedirectToAction("Index");

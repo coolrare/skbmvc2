@@ -12,12 +12,21 @@ namespace WebApplication1.Controllers
 {
     public class CoursesController : Controller
     {
-        private ContosoUniversityEntities db = new ContosoUniversityEntities();
+        //private ContosoUniversityEntities db = new ContosoUniversityEntities();
+
+        private CourseRepository repo;
+        private DepartmentRepository repoD;
+
+        public CoursesController()
+        {
+            repo = RepositoryHelper.GetCourseRepository();
+            repoD = RepositoryHelper.GetDepartmentRepository(repo.UnitOfWork);
+        }
 
         // GET: Courses
         public ActionResult Index()
         {
-            var course = db.Course.Include(c => c.Department);
+            var course = repo.All().Include(c => c.Department);
             return View(course.ToList());
         }
 
@@ -28,7 +37,7 @@ namespace WebApplication1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Course.Find(id);
+            Course course = repo.Find(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
@@ -39,7 +48,7 @@ namespace WebApplication1.Controllers
         // GET: Courses/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name");
+            ViewBag.DepartmentID = new SelectList(repoD.All(), "DepartmentID", "Name");
             return View();
         }
 
@@ -54,8 +63,8 @@ namespace WebApplication1.Controllers
             {
                 course.CreatedOn = DateTime.Now;
 
-                db.Course.Add(course);
-                db.SaveChanges();
+                repo.Add(course);
+                repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
 
@@ -70,12 +79,12 @@ namespace WebApplication1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Course.Find(id);
+            Course course = repo.Find(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
+            ViewBag.DepartmentID = new SelectList(repoD.All(), "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -88,8 +97,8 @@ namespace WebApplication1.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(course).State = EntityState.Modified;
-                db.SaveChanges();
+                repo.UnitOfWork.Context.Entry(course).State = EntityState.Modified;
+                repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
             ViewBag.DepartmentID = new SelectList(db.Department, "DepartmentID", "Name", course.DepartmentID);
@@ -103,7 +112,7 @@ namespace WebApplication1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Course.Find(id);
+            Course course = repo.Find(id.Value);
             if (course == null)
             {
                 return HttpNotFound();
@@ -116,9 +125,9 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Course course = db.Course.Find(id);
-            db.Course.Remove(course);
-            db.SaveChanges();
+            Course course = repo.Find(id);
+            repo.Delete(course);
+            repo.UnitOfWork.Commit();
             return RedirectToAction("Index");
         }
 
@@ -126,7 +135,7 @@ namespace WebApplication1.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                repo.UnitOfWork.Context.Dispose();
             }
             base.Dispose(disposing);
         }

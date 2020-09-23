@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -11,12 +11,12 @@ namespace WebApplication1.Models
         //    return base.All().Where(p => p.IsEnabled == true);
         //}
 
-        public Course Get³æ¤@µ§¸ê®Æ(int id)
+        public Course Find(int id)
         {
 			return this.All().Where(p => p.CourseID == id).First();
         }
 
-		public List<Course> Get©Ò¦³Git½Òµ{()
+		public List<Course> Getæ‰€æœ‰Gitèª²ç¨‹()
 		{
 			return this.All().Where(p => p.Title.Contains("Git")).ToList();
 		}

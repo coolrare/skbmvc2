@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
 
             var data = repo.All();
 
-            var item = repo.Get單一筆資料(1);
+            var item = repo.Find(1);
 
             var agit = repo.Get所有Git課程();
 

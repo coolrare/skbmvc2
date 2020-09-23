@@ -15,6 +15,11 @@ namespace WebApplication1.Models
 
         public override bool IsValid(object value)
         {
+            if (value == null)
+            {
+                return true;
+            }
+
             return checkId((string)value);
         }
 

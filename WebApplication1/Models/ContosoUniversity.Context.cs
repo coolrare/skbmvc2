@@ -27,7 +27,6 @@ namespace WebApplication1.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Course> Course { get; set; }
         public virtual DbSet<Department> Department { get; set; }
         public virtual DbSet<Enrollment> Enrollment { get; set; }
         public virtual DbSet<OfficeAssignment> OfficeAssignment { get; set; }
@@ -35,6 +34,7 @@ namespace WebApplication1.Models
         public virtual DbSet<vwCourseStudentCount> vwCourseStudentCount { get; set; }
         public virtual DbSet<vwCourseStudents> vwCourseStudents { get; set; }
         public virtual DbSet<vwDepartmentCourseCount> vwDepartmentCourseCount { get; set; }
+        public virtual DbSet<Course> Course { get; set; }
     
         public virtual int Department_Delete(Nullable<int> departmentID, byte[] rowVersion_Original)
         {

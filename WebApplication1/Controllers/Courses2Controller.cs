@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -22,6 +23,23 @@ namespace WebApplication1.Controllers
         {
             var data = db.Course.ToList();
 
+            return View(data);
+        }
+
+        public ActionResult ListByDepartment(int deptId)
+        {
+            //var data = db.Course.Where(p => p.DepartmentID == deptId).ToList();
+            var dept = db.Department.Include(p => p.Course);
+            var data = dept.First(p => p.DepartmentID == deptId).Course.ToList();
+            return Content(sb.ToString(), "text/plain");
+            //return View(data);
+        }
+
+        public ActionResult ListStudents(int id)
+        {
+            var cour = db.Course.Include(p => p.Students).First(p => p.CourseID == id);
+            var data = cour.Students;
+            //return Content(sb.ToString(), "text/plain");
             return View(data);
         }
 

@@ -14,6 +14,8 @@ namespace WebApplication1.Controllers
         StringBuilder sb = new StringBuilder();
         ContosoUniversityEntities db = new ContosoUniversityEntities();
 
+        CourseRepository repo = RepositoryHelper.GetCourseRepository();
+
         public Courses2Controller()
         {
             db.Database.Log = (sql) => sb.AppendLine(sql);
@@ -21,7 +23,13 @@ namespace WebApplication1.Controllers
 
         public ActionResult Index()
         {
-            var data = db.Course.ToList();
+            // var data = db.Course.ToList();
+
+            var data = repo.All();
+
+            var item = repo.Get單一筆資料(1);
+
+            var agit = repo.Get所有Git課程();
 
             return View(data);
         }

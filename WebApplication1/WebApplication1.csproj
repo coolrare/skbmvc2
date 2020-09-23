@@ -183,6 +183,7 @@
     <Compile Include="Models\vwDepartmentCourseCount.cs">
       <DependentUpon>ContosoUniversity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\身分證字號Attribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
